@@ -1,5 +1,5 @@
 from xml.etree.ElementTree import ElementTree, Element, Comment, SubElement, tostring
-# from ElementTree_pretty import prettify
+from xml.dom import minidom
 import datetime
 
 
@@ -10,7 +10,6 @@ class ReadAndWriteXML:
     def get_messages(self):
         return self.message_log
 
-    @staticmethod
     def create_xml_file(self, document_path, message_log):
         root = Element('LogMessages')
 
@@ -19,7 +18,6 @@ class ReadAndWriteXML:
 
         child = SubElement(root, 'LogMessages')
 
-        # TODO: how to add the new node after?
         for key, value in message_log.items():
             sub_child = SubElement(child, 'LogMessage')
             sub_child.set('transformer', key)
@@ -30,15 +28,14 @@ class ReadAndWriteXML:
         tree = ElementTree(root)
         tree.write(document_path)
 
-
     def read_xml_document(self, document_path):
         tree = ElementTree(file=document_path)
         root = tree.getroot()
 
         messages_dict = {}
         for child in root.iterfind('LogMessages/LogMessage'):
-            transformer = child.find('./LogMessage').attrib['transformer']
-            user_message = child.find('./LogMessage').attrib['user.log']
+            transformer = child.attrib['transformer']
+            user_message = child.attrib['user.log']
             messages_dict[transformer] = user_message
 
         self.message_log = messages_dict
