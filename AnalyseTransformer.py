@@ -134,4 +134,8 @@ if __name__ == '__main__':
     message_dict = {'1000 #0|$(GN_FIELD)#': '1000 {0}', '1001 #0|$(GN_FIELD)#': '1001 {0}'}
     xml_path = os.path.join(transformer_path, 'messages.xml')
     xrw = XmlReadWrite.ReadAndWriteXML()
-    xrw.create_xml_file(xml_path, message_dict)
+    # xrw.create_xml_file(xml_path, message_dict)
+    xrw.read_xml_document(xml_path)
+    mess = xrw.get_messages()
+    for k, v in mess.items():
+        print('{0} {1}'.format(k, v))

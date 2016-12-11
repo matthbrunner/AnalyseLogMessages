@@ -5,7 +5,10 @@ import datetime
 
 class ReadAndWriteXML:
     def __init__(self):
-        pass
+        self.message_log = {}
+
+    def get_messages(self):
+        return self.message_log
 
     @staticmethod
     def create_xml_file(self, document_path, message_log):
@@ -26,3 +29,18 @@ class ReadAndWriteXML:
 
         tree = ElementTree(root)
         tree.write(document_path)
+
+
+    def read_xml_document(self, document_path):
+        tree = ElementTree(file=document_path)
+        root = tree.getroot()
+
+        messages_dict = {}
+        for child in root.iterfind('LogMessages/LogMessage'):
+            transformer = child.find('./LogMessage').attrib['transformer']
+            user_message = child.find('./LogMessage').attrib['user.log']
+            messages_dict[transformer] = user_message
+
+        self.message_log = messages_dict
+
+
