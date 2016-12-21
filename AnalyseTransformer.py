@@ -1,6 +1,7 @@
 # coding=utf-8
 import logging.handlers
 import os
+import XmlReadWrite
 from fnmatch import fnmatch
 
 
@@ -103,29 +104,38 @@ class AnalyseTransformer:
 # ---------------------------------------------------------------------------
 # -- START the process----
 if __name__ == '__main__':
-    at = AnalyseTransformer()
-
-    logging.info("--! START Read Transformers")
-
-    transformer_path = r"C:\Users\brma\Documents\FME\Transformers"
-    workbench_path = r'C:\Workspace\ArcProjects\GNDC_Workshop\media'
-    transformer_extension = ".fmx"
-    workbench_extension = "*.fmw"
-
-    file_list = []
-    file_list = at.read_all_files_in_folder(transformer_path, transformer_extension)
-    file_list = at.get_all_workbenches(workbench_path, workbench_extension, file_list)
-
-    messages = []
-    for each_file in file_list:
-        logging.debug(each_file)
-        if each_file.endswith(transformer_extension):
-            messages.append(at.read_all_lines_from_transformer(os.path.join(transformer_path, each_file), each_file))
-        else:
-            messages.append(at.read_all_lines_from_transformer(os.path.join(workbench_path, each_file), each_file))
-
-    if len(messages) > 0:
-        at.write_all_messages_from_transformer(os.path.join(transformer_path, "test.csv"), messages)
+    # at = AnalyseTransformer()
+    #
+    # logging.info("--! START Read Transformers")
+    #
+    # transformer_path = r"C:\Users\brma\Documents\FME\Transformers"
+    # workbench_path = r'C:\Workspace\ArcProjects\GNDC_Workshop\media'
+    # transformer_extension = ".fmx"
+    # workbench_extension = "*.fmw"
+    #
+    # file_list = []
+    # file_list = at.read_all_files_in_folder(transformer_path, transformer_extension)
+    # file_list = at.get_all_workbenches(workbench_path, workbench_extension, file_list)
+    #
+    # messages = []
+    # for each_file in file_list:
+    #     logging.debug(each_file)
+    #     if each_file.endswith(transformer_extension):
+    #         messages.append(at.read_all_lines_from_transformer(os.path.join(transformer_path, each_file), each_file))
+    #     else:
+    #         messages.append(at.read_all_lines_from_transformer(os.path.join(workbench_path, each_file), each_file))
+    #
+    # if len(messages) > 0:
+    #     at.write_all_messages_from_transformer(os.path.join(transformer_path, "test.csv"), messages)
 
     # TODO: include methode [replace_hash_with_format]
     # TODO: Add method to replace the language file if it's different
+    transformer_path = r'C:\temp'
+    message_dict = {'1000 #0|$(GN_FIELD)#': '1000 {0}', '1001 #0|$(GN_FIELD)#': '1001 {0}'}
+    xml_path = os.path.join(transformer_path, 'messages.xml')
+    xrw = XmlReadWrite.ReadAndWriteXML()
+    # xrw.create_xml_file(xml_path, message_dict)
+    xrw.read_xml_document(xml_path)
+    mess = xrw.get_messages()
+    for k, v in mess.items():
+        print('{0} {1}'.format(k, v))
