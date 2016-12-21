@@ -151,7 +151,7 @@ if __name__ == '__main__':
     xml_path = os.path.join(transformer_path, 'messages.xml')
     xrw = XmlReadWrite.ReadAndWriteXML()
     xrw.create_xml_file(xml_path, dct)
-    xrw.read_xml_document(xml_path)
-    mess = xrw.get_messages()
-    for k, v in mess.items():
-        print('{0} {1}'.format(k, v))
+#     xrw.read_xml_document(xml_path)
+#     mess = xrw.get_messages()
+#     for k, v in mess.items():
+#         print('{0} {1}'.format(k, v))

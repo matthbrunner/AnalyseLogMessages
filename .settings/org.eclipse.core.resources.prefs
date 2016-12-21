@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
 encoding/AnalyseTransformer.py=utf-8
+encoding/XmlReadWrite.py=utf-8
+encoding/test_analyseTransformer.py=utf-8
