@@ -1,5 +1,6 @@
+# coding=utf-8
 from xml.etree.ElementTree import ElementTree, Element, Comment, SubElement, tostring
-from xml.dom import minidom
+import xml.dom.minidom as dom
 import datetime
 
 
@@ -11,22 +12,26 @@ class ReadAndWriteXML:
         return self.message_log
 
     def create_xml_file(self, document_path, message_log):
-        root = Element('LogMessages')
-
-        comment = Comment('This XML Document was created at {0}'.format(datetime.datetime.now()))
-        root.append(comment)
-
-        child = SubElement(root, 'LogMessages')
-
+        tree = dom.Document()
+        root = dom.Element('LogMessages')
+        
         for key, value in message_log.items():
-            sub_child = SubElement(child, 'LogMessage')
-            sub_child.set('transformer', key)
-            sub_child.set('user.log', value)
+            element_tag = dom.Element('LogMessag')
+            attr = dom.Attr("transformer")
+            attr.value = str(key) # also sets nodeValue
+            element_tag.setAttributeNode(attr)
+            attr = dom.Attr("user.log")
+            attr.value = str(value) # also sets nodeValue
+            element_tag.setAttributeNode(attr)
 
-        print(tostring(root))
+            root.appendChild(element_tag)
+            
+        tree.appendChild(root)
+        
+        f = open(document_path, "w") 
+        tree.writexml(f, "", "    ", "\n") 
+        f.close()
 
-        tree = ElementTree(root)
-        tree.write(document_path)
 
     def read_xml_document(self, document_path):
         tree = ElementTree(file=document_path)
