@@ -51,7 +51,7 @@ class AnalyseTransformer:
         return line
 
     # ---------------------------------------------------------------------------
-    def read_all_lines_from_transformer(self, file, file_name):
+    def read_all_lines_from_transformer(self, file, file_name, use_file_path = False):
         result_list = []
 
         # Open a file
@@ -63,7 +63,10 @@ class AnalyseTransformer:
                     tmp_line = line.replace(r'#! <XFORM_PARM PARM_NAME="MESSAGE_TEXT" PARM_VALUE="', '')
                     tmp_line = tmp_line.replace(r'"/>', '').strip()
                     temp_list = []
-                    temp_list.append(os.path.basename(file_name).encode("utf-8"))
+                    if use_file_path == True:
+                        temp_list.append(os.path.basename(file_name).encode("utf-8"))
+                    else:
+                        temp_list.append(file.encode("utf-8"))
                     start_index = 5
                     temp_code = tmp_line[:4].strip()
                     if temp_code.isnumeric():
@@ -127,9 +130,9 @@ if __name__ == '__main__':
     for each_file in file_list:
         logging.debug(each_file)
         if each_file.endswith(transformer_extension):
-            messages.append(at.read_all_lines_from_transformer(os.path.join(transformer_path, each_file), each_file))
+            messages.append(at.read_all_lines_from_transformer(os.path.join(transformer_path, each_file), each_file), True)
         else:
-            messages.append(at.read_all_lines_from_transformer(os.path.join(workbench_path, each_file), each_file))
+            messages.append(at.read_all_lines_from_transformer(os.path.join(workbench_path, each_file), each_file), True)
      
     dct = {}
     if len(messages) > 0:
